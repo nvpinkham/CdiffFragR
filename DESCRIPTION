@@ -1,15 +1,11 @@
 Package: CdiffFragR
-Title: What the Package Does (One Line, Title Case)
+Title: Match FSA files to a Database
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "First",
-           family = "Last",
-           role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+Author:  N. V. Pinkham 
+Maintainer:  N. V. Pinkham <biopinkham@gmail.com>
+Imports: MLPA, bayestestR, vegan, permute, and lattice
+Description: FragmentR is an R tool for DNA fragment analysis, developed and maintained by the Walk Lab at MSU Bozeman.
+License: GNU General Public License v3.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
