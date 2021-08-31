@@ -1,2 +1,2 @@
 # CdiffFragR
-Used for C diff Ribotyping
+Used for _C diff_ Ribotyping
