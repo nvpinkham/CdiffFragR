@@ -86,7 +86,7 @@ results$Confidence[results$Dist_1 >=  0.2] <- "poor match"
 write.csv(results, paste0(results.dir, "/SUMMARY.csv"))
 print("Success!")
 
-zip(zipfile = paste0("Results", Sys.Date(), ".zip"), files = results.dir)
+zip::zip(zipfile = paste0("Results", Sys.Date(), ".zip"), files = results.dir)
 
 
 
