@@ -1,4 +1,4 @@
 # CdiffFragR
 Used for _C diff_ Ribotyping
 
-Manual : [cdifffragr.12.06.pdf](https://github.com/nvpinkham/CdiffFragR/)
+Manual : [cdifffragr.12.06.pdf](https://github.com/nvpinkham/CdiffFragR/blob/main/man/cdifffragr.12.06.pdf)
