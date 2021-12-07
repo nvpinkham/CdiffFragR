@@ -5,7 +5,7 @@ options(warn=-1)
 
 getwd()
 
-source("R/Functions.12.07.R")
+source("R/Functions.21.12.07.R")
 unzip("data/F-Ribotyping_Reps.lite.15.zip")# will move current directory
 
 rox.ladder <- c(50,  75, 100, 125, 150, 200, 250, 300, 350, 400, 450, 475, 500,
