@@ -288,10 +288,13 @@ plot.fsa <- function(file_path,
   triplet <- which(time %in% tightest_triplet(time[5:(length(time) - 5)]))[1]
   adj  <-  triplet - which(ladder == 450) + 1
   
-  time <- time[adj : length(time)]
-  height <- height[adj : length(time)]
-  ladder <- ladder[1:(length(ladder) - adj + 1)]
-  
+  if(length(adj) > 0){
+    time <- time[adj : length(time)]
+    height <- height[adj : length(time)]
+    ladder <- ladder[1:(length(ladder) - adj + 1)]
+  }else{
+    message("Warning: ladder looks off")
+  }
   ######
   
   text(time,
@@ -660,12 +663,10 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
                           query.ladder = rox.ladder,
                           query.channel= 1,
                           query.channel.ladder = 4,
-
                           hit.inDB,
                           hit.ladder = rox.ladder,
                           hit.channel= 1,
                           hit.channel.ladder = 4,
-                          
                           db = cd.db,
                           meth = "bc",
                           look4triplet = T,
@@ -680,6 +681,7 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
   str.1 <- filter.bp(str.1)
 
   str.2 <- db$database[[which(names(db$database) == hit.inDB)]]
+  dist <- pairwise.dist(str.1, str.2, method = meth)
   
   cdiff1 <- read.fsa(query.file)
   cdiff2 <- read.fsa(hit.inDB)
@@ -730,8 +732,6 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
         round(str.2$bp, 0), pos = 4, col = 2)
 
   ################ make hit plot ################
-  dist <- pairwise.dist(str.1, str.2, method = meth)
-
   a <- strsplit(query.file, "/")[[1]]
   b <- strsplit(hit.file, "/")[[1]]
 
@@ -938,112 +938,6 @@ eval.bin <- function(ribo.pick, db,  bc.cut = .25, plot = T){
     return(res)
   }
 }
-
-compare.frags2 <- function( hit.path,
-                            query.file =  "Promega_001_96-well-plate_ready-to-go/001-G09.fsa",
-                            query.ladder = rox.ladder,
-                            query.channel = 1,
-                            query.channel.ladder = 4,
-                            hit.channel = 1,
-                            database = db,
-                            meth = "bc",
-                            sd = 2.5,
-                            cutoff = 250){
-
-  str.1 <- sum.fsa(file_path = query.file,
-                   sd = sd,
-                   ladder = query.ladder,
-                   channel.query = query.channel,
-                   channel.ladder = query.channel.ladder,
-                   cutoff = cutoff)
-  str.1 <- filter.bp(str.1)
-
-  database.hit <- database$database[names(database$database) == hit.path]
-  database.settings <- database$settings[names(database$database) == hit.path][[1]]
-
-  str.2 <- sum.fsa(file_path = hit.file,
-                   sd = sd,
-                   ladder =  database$ladder,
-                   channel.query = 1,
-                   channel.ladder = 4,
-                   cutoff =  database.settings[1])
-
-  str.2 <- filter.bp(str.2)
-
-  cdiff1 <- read.fsa(query.file)
-  cdiff2 <- read.fsa(hit.file)
-
-  cdiff1 <-   cdiff1[, query.channel]
-  cdiff2 <-   cdiff2[, hit.channel]
-
-  cdiff1[cdiff1 < 0] <- 0
-  cdiff2[cdiff2 < 0] <- 0
-
-  bp.1 <- str.1$bp
-  time.1 <- str.1$time
-
-  lm.1 <- lm(bp.1 ~ time.1)
-  str1.x <- predict(lm.1, newdata = data.frame(time.1 = 1 : length(cdiff1)))
-
-  cdiff1 <- (cdiff1 / max(cdiff1[  str1.x > 150 &   str1.x < 650])) * 100
-  # normaliz to peak value in the 150 to 650 bp range
-
-  plot(str1.x, cdiff1,  type = "l", xlim = c(150, 650), ylim = c(0,100),
-       xlab = "bp", ylab = "peak intensity", lwd = 2)
-
-  points( str1.x[str.1$time],
-          cdiff1[str.1$time])
-
-  text( str1.x[str.1$time],
-        cdiff1[str.1$time],
-        round(str.1$bp, 0), pos = 2)
-
-  bp.2 <- str.2$bp
-  time.2 <- str.2$time
-
-  lm.2 <- lm(bp.2 ~ time.2)
-  str2.x <- predict(lm.2, newdata = data.frame(time.2 = 1 : length(cdiff2)))
-
-
-  cdiff2 <- (cdiff2 / max(cdiff2[  str2.x > 150 &   str2.x < 650])) * 100
-
-  lines(str2.x, cdiff2, type = "l", col = 2, lwd = 2, lty = 1)
-
-  points( str2.x[str.2$time],
-          cdiff2[str.2$time],
-          col = 2)
-
-  text( str2.x[str.2$time],
-        cdiff2[str.2$time],
-        round(str.2$bp, 0), pos = 4, col = 2)
-
-  ################ make hit plot ################
-  dist <- pairwise.dist(str.1, str.2, method = meth)
-
-  a <- strsplit(query.file, "/")[[1]]
-  b <- strsplit(hit.file, "/")[[1]]
-
-  ribo <- b[length(b) - 1]# Check to make sure each folder is a ribotype
-
-  title(paste0(round(dist, 3), "BC distance from\n",
-               a[length(a)], "\nto refference ",
-               b[length(b)], " (",
-               ribo, ")"))
-
-  legend("topright", lty =1, col = c(1,2),
-         legend = c( a[length(a)],
-                     b[length(b)]))
-
-  res <- c(query.file, hit.file, dist, ribo)
-  names(res) <- c("query.file", "hit.file", "BCdist", "ribotype")
-  res <- as.matrix(res)
-  res <- as.data.frame(t(res))
-  res$BCdist <- as.numeric(res$BCdist)
-
-  return(res)
-}
-
-
 
 fsa2df <- function(file_path){
 
