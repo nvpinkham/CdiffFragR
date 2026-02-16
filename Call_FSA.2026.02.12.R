@@ -83,7 +83,7 @@ for(i in 1 : nrow(results)){
 
   results$chormatogram_jpeg[i] <- chrom.file
 
-  #file.rename(from = p1[i], to = gsub("Files_to_analyze", "Files_analyzed", p1[i]))
+  file.rename(from = p1[i], to = gsub("Files_to_analyze", "Files_analyzed", p1[i]))
 
 }
 
