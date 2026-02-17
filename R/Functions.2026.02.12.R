@@ -199,9 +199,15 @@ plot.fsa <- function(file_path,
     return("fsa not able to be parsed")
   }
 
+  par(mar = c(5, 7, 2, 2))
   plot(cdiff[, 1], type = "n",
-       ylim = range(cdiff) * 1.05,
-       ylab = "", xlab = "")
+       ylim = range(cdiff) * 1.075,
+       axes = F, 
+       ylab = "Fluorescence intensity\n\n",
+       xlab = "Time (scan index)")
+  axis(1, font = 3)
+  axis(2, las = 2, font = 3)
+  
 
   abline(h = cutoff, lty = 3)
 
@@ -268,12 +274,14 @@ plot.fsa <- function(file_path,
          pch = 21,
          col = channels,
          pt.bg = dyes,
-         bg = "snow1",
+         bg = "lightyellow",
          legend = paste(names(dyes),
                         "  wavelength =",
                         attr(cdiff, "wavelengths")[channels],
                         "NM"))
-  legend("bottomright", paste("file path =", file_path))
+  legend("bottomright", 
+         paste("file path =", file_path), 
+         bg = "lightyellow")
 
   l.r <- rev(ladder)
   h.r <- rev(res[[channel.ladder]]$height)
