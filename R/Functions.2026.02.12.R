@@ -667,6 +667,7 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
                           hit.ladder = rox.ladder,
                           hit.channel= 1,
                           hit.channel.ladder = 4,
+                          hit.col = "magenta", 
                           db = cd.db,
                           meth = "bc",
                           look4triplet = T,
@@ -705,13 +706,24 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
        type = "l",
        xlim = c(150, 650), 
        ylim = c(-20,100),
-       xlab = "bp", 
-       ylab = "peak intensity",
-       lwd = 2)
+       xlab = "Base Pair", 
+       ylab = "Peak intensity",
+       font.lab = 4, 
+       lwd = 2, 
+       axes = FALSE)
+  
+  axis(1, font = 3)
+  axis(2, font = 3, las = 2) # las=1 → horizontal y labels
+  
 
   text( str1.x[str.1$time],
         cdiff1[str.1$time],
-        round(str.1$bp, 0), pos = 2)
+        round(str.1$bp, 0), 
+        pos = 2)
+  
+  points( str1.x[str.1$time],
+          cdiff1[str.1$time],
+          pch = 19)
 
   bp.2 <- str.2$bp
   time.2 <- str.2$time
@@ -721,33 +733,42 @@ compare.frags <- function(query.file =  "Promega_001_96-well-plate_ready-to-go/0
 
   cdiff2 <- (cdiff2 / max(cdiff2[  str2.x > 150 &   str2.x < 650])) * 100
 
-  lines(str2.x, cdiff2, type = "l", col = 2, lwd = 2, lty = 1)
+  lines(str2.x, 
+        cdiff2, 
+        type = "l", 
+        col = hit.col,
+        lwd = 2, 
+        lty = 1)
 
   points( str2.x[str.2$time],
           cdiff2[str.2$time],
-          col = 2)
+          pch = 19, 
+          col = hit.col)
 
   text( str2.x[str.2$time],
         cdiff2[str.2$time],
-        round(str.2$bp, 0), pos = 4, col = 2)
+        round(str.2$bp, 0),
+        pos = 4,
+        col = hit.col)
 
   ################ make hit plot ################
-  a <- strsplit(query.file, "/")[[1]]
-  b <- strsplit(hit.file, "/")[[1]]
+  a <- rev(strsplit(query.file, "/")[[1]])[1]
+  ribo <- strsplit(hit.inDB, "/")[[1]][2]
 
-  ribo <- b[length(b) - 1]# Check to make sure each folder is a ribotype
+  title(paste0(round(dist, 3), " ", meth, " distance from\n",
+               a, "\nto Refference ",
+               hit.inDB, " (",
+               ribo, ")"), font.main = 1)
 
-  title(paste0(round(dist, 3), "BC distance from\n",
-               a[length(a)], "\nto refference ",
-               b[length(b)], " (",
-               ribo, ")"))
+  leg <- c(  a[length(a)], hit.inDB)
+  
+  legend("bottom", lty =1, col = c(1,hit.col), 
+         leg, 
+         text.font = 3,
+         lwd = 2, 
+         bg = "lightyellow")
 
-  legend("bottom", lty =1, col = c(1,2),
-         legend = c( a[length(a)],
-                     b[length(b)]), 
-         bg = "snow2")
-
-  res <- c(query.file, hit.file, dist, ribo)
+  res <- c(query.file, hit.inDB, dist, ribo)
   names(res) <- c("query.file", "hit.file", "BCdist", "ribotype")
   res <- as.matrix(res)
   res <- as.data.frame(t(res))
