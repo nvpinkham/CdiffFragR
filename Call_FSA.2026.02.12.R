@@ -77,7 +77,7 @@ for(i in 1 : nrow(results)){
   }
 
   chrom.file <- paste0(results.dir, "/chrom_",  jpegs[i])
-  jpeg(  chrom.file, height = 1800, width = 1800, res = 300)
+  jpeg(  chrom.file, height = 1200, width = 2400, res = 300)
   plot.fsa(file_path = p1[i], ladder = rox.ladder, cutoff = 250)
   dev.off()
 
