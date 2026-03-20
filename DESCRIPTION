@@ -1,14 +1,14 @@
 Package: CdiffFragR
 Title: Match FSA files to a Database
-Version: 0.0.0.9000
+Version: 0.1.3
 Author: N. V. Pinkham 
 Maintainer: N. V. Pinkham <biopinkham@gmail.com>
-Imports: MLPA, bayestestR, vegan, permute, and lattice
-Description: FragmentR is an R tool for DNA fragment analysis, developed and maintained by the Walk Lab at MSU Bozeman.
+Imports: bayestestR, vegan, permute, lattice, DescTools, zip
+Description: CdiffFragR and FragmentR are R tools for DNA fragment analysis, developed and maintained by Nick Pinkham and the Walk Lab at MSU Bozeman.
 License: GNU General Public License v3.0
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 Depends: 
-    R (>= 2.10)
+    R (>= 4.0.0)
