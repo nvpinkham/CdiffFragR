@@ -567,10 +567,7 @@ compare.frags <- function(query.file,
   a <- rev(strsplit(query.file, "/")[[1]])[1]
   ribo <- strsplit(hit.inDB, "/")[[1]][2]
 
-  title(paste0(round(dist, 3), " ", meth, " distance from\n",
-               a, "\nto Refference ",
-               hit.inDB, " (",
-               ribo, ")"), font.main = 1)
+  title(paste(meth, "distance", round(dist, 3)), font.main = 1)
 
   leg <- c(  a[length(a)], hit.inDB)
   
