@@ -33,7 +33,7 @@ results.dir <- paste0("Results_", hour_of_day)
 dir.create(results.dir, showWarnings = F)
 
 
-dir.create("Files_analyzed", showWarnings = F)
+dir.create("Files_analyzed")
 
 results <-  as.data.frame(matrix(ncol = 10, nrow = length(p1)))
 colnames(results) <- c("query_file",
@@ -91,8 +91,8 @@ for(i in 1 : nrow(results)){
     all.dists <- rbind(res.i.ordered, cd.db.dist)
     all.dists <- cbind(c(0, res.i.ordered), all.dists)
     
-    row.names(all.dists)[1] <- p1[i]
-    colnames(all.dists)[1] <- p1[i]
+    row.names(all.dists)[1] <- paste0("dummy/", p1[i])
+    colnames(all.dists)[1] <-  paste0("dummy/", p1[i])
     
     ribotypes.db <- get.element(row.names(all.dists),
                                 sep = "/", 
@@ -114,8 +114,7 @@ for(i in 1 : nrow(results)){
     
     hit.file <- paste0(results.dir, "/hit_",  jpegs[i])
     
-    jpeg(hit.file, width = 10, height = 6, units = "in", res = 300,
-         quality = 100, pointsize = 14)
+    jpeg(    hit.file)
     
     res1 <- compare.frags(query.file = p1[i] ,
                           hit.inDB = names(res.i$matches[1]))
@@ -148,6 +147,7 @@ write.csv(results, paste0(results.dir, "/SUMMARY.csv"))
 print("Success!")
 
 zip(zipfile = paste0("Results", Sys.Date(), ".zip"), files = results.dir)
+
 
 
 
