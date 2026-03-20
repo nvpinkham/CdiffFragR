@@ -56,7 +56,8 @@ for(i in 1 : nrow(results)){
   
   chrom.file <- paste0(results.dir, "/chrom_",  jpegs[i])
   
-  jpeg(  chrom.file, height = 1200, width = 2400, res = 300)
+  jpeg(chrom.file, width = 7, height = 7, units = "in", res = 300,
+         quality = 100, pointsize = 14)
   
   res.i <- find.match(file.query = p1[i], 
                       ladder = rox.ladder, 
@@ -114,7 +115,8 @@ for(i in 1 : nrow(results)){
     
     hit.file <- paste0(results.dir, "/hit_",  jpegs[i])
     
-    jpeg(    hit.file)
+    jpeg(hit.file, width = 10, height = 5, units = "in", res = 300,
+         quality = 100, pointsize = 14)
     
     res1 <- compare.frags(query.file = p1[i] ,
                           hit.inDB = names(res.i$matches[1]))
