@@ -300,7 +300,7 @@ sum.fsa <- function(file_path,
   time <- rev(t.r[1 : min(c(length(l.r), length(t.r)))])
   ladder <- rev(l.r[1 : min(c(length(l.r), length(h.r)))])
   
-  if(look4triplet & length(time) > 12){
+  if(look4triplet & length(time) >= 15){
     
     triplet <- which(time %in% tightest_triplet(time[5:(length(time) - 5)]))[1]
     adj     <- triplet - which(ladder == 450) + 1
